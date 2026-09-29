@@ -6,6 +6,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
+// STEP 1: Safe MapLibre configuration and circular error serialization guard
+import { initializeMapLibreWorker, attachSafeMapErrorHandler } from '../../utils/maplibreSetup';
 import { 
   PotentialFishingZone, 
   MarineSafetyAlert, 
@@ -123,11 +125,21 @@ export const MarineIntelligenceMap: React.FC<MarineIntelligenceMapProps> = ({
   // Markers ref for smooth cleanup and updates
   const markersRef = useRef<maplibregl.Marker[]>([]);
 
+  // Keep references to dynamic callbacks to avoid rebuilding map on re-render
+  const warningCallbackRef = useRef(onTriggerGeofenceWarning);
+  warningCallbackRef.current = onTriggerGeofenceWarning;
+
+  const protectedZonesRef = useRef(protectedZones);
+  protectedZonesRef.current = protectedZones;
+
   // =========================================================================
   // STEP 6: INITIALIZE MAPLIBRE GL INSTANCE WITH CARTO DARK BASEMAP
   // =========================================================================
   useEffect(() => {
     if (!mapContainerRef.current || mapInstanceRef.current) return;
+
+    // STEP 6.1: Initialize global worker
+    initializeMapLibreWorker();
 
     const cartoKey = getCartoApiKey();
     const cartoParam = cartoKey ? `?key=${encodeURIComponent(cartoKey)}` : '';
@@ -161,6 +173,9 @@ export const MarineIntelligenceMap: React.FC<MarineIntelligenceMapProps> = ({
       bearing: 0,
     });
 
+    // STEP 6.2: Attach safe error guard to prevent circular JSON error serialization
+    attachSafeMapErrorHandler(map, '[MarineIntelligenceMap]');
+
     map.addControl(new maplibregl.NavigationControl({ showCompass: true }), 'top-right');
     mapInstanceRef.current = map;
 
@@ -171,7 +186,7 @@ export const MarineIntelligenceMap: React.FC<MarineIntelligenceMapProps> = ({
 
       // Check proximity to protected zones
       let activeWarning: string | undefined = undefined;
-      for (const pz of protectedZones) {
+      for (const pz of protectedZonesRef.current) {
         const dLat = (clickLat - pz.center.lat) * 111;
         const dLng = (clickLng - pz.center.lng) * 111 * Math.cos((clickLat * Math.PI) / 180);
         const distKm = Math.hypot(dLat, dLng);
@@ -190,8 +205,8 @@ export const MarineIntelligenceMap: React.FC<MarineIntelligenceMapProps> = ({
         warning: activeWarning,
       });
 
-      if (activeWarning && onTriggerGeofenceWarning) {
-        onTriggerGeofenceWarning(activeWarning);
+      if (activeWarning && warningCallbackRef.current) {
+        warningCallbackRef.current(activeWarning);
       }
     });
 
@@ -199,7 +214,7 @@ export const MarineIntelligenceMap: React.FC<MarineIntelligenceMapProps> = ({
       map.remove();
       mapInstanceRef.current = null;
     };
-  }, [protectedZones, onTriggerGeofenceWarning]);
+  }, []);
 
   // =========================================================================
   // STEP 8: RENDER VECTOR OVERLAYS AND MARKERS (PFZ, ALERTS, GEOFENCES)
@@ -425,81 +440,98 @@ export const MarineIntelligenceMap: React.FC<MarineIntelligenceMapProps> = ({
       )}
 
       {/* =======================================================================
-          STEP 11: LAYER VISIBILITY QUICK TOGGLE DOCK (STEP 14)
+          STEP 11: LAYER VISIBILITY QUICK TOGGLE DOCK (COLLAPSIBLE TO PREVENT OVERLAP)
           ======================================================================= */}
       <div className="absolute bottom-4 left-3 z-20">
-        <div className="bg-black/90 border border-white/15 rounded-xl p-2.5 shadow-2xl backdrop-blur-xl text-xs font-mono-code max-w-xs">
-          <div className="flex items-center justify-between pb-1.5 mb-1.5 border-b border-white/10 text-[11px] text-white/60">
-            <div className="flex items-center gap-1.5 font-medium text-white/90">
-              <Layers className="w-3.5 h-3.5 text-cyan-400" />
-              <span>MAP LAYERS</span>
+        {!isLayerMenuOpen ? (
+          <button
+            onClick={() => setIsLayerMenuOpen(true)}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/85 hover:bg-black/95 border border-white/20 hover:border-white/40 text-xs font-mono-code text-white shadow-2xl backdrop-blur-xl transition-all cursor-pointer"
+            title="Expand Map Layers Controls"
+          >
+            <Layers className="w-3.5 h-3.5 text-cyan-400" />
+            <span>Map Layers</span>
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 ml-0.5" />
+          </button>
+        ) : (
+          <div className="bg-black/95 border border-white/20 rounded-xl p-2.5 shadow-2xl backdrop-blur-xl text-xs font-mono-code max-w-xs animate-fade-slide-up">
+            <div className="flex items-center justify-between pb-1.5 mb-1.5 border-b border-white/10 text-[11px] text-white/60">
+              <div className="flex items-center gap-1.5 font-medium text-white/90">
+                <Layers className="w-3.5 h-3.5 text-cyan-400" />
+                <span>ACTIVE MAP LAYERS</span>
+              </div>
+              <button
+                onClick={() => setIsLayerMenuOpen(false)}
+                className="text-[10px] text-white/40 hover:text-white px-1.5 py-0.5 rounded hover:bg-white/10 cursor-pointer"
+              >
+                Hide
+              </button>
             </div>
-            <span className="text-[10px] text-white/40">STEP 14</span>
+
+            <div className="grid grid-cols-2 gap-1.5 text-[11px]">
+              <button
+                onClick={() => setShowPfz(!showPfz)}
+                className={`px-2 py-1 rounded flex items-center justify-between transition-colors cursor-pointer ${
+                  showPfz ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' : 'bg-white/5 text-white/40'
+                }`}
+              >
+                <span>PFZ Zones</span>
+                <span className="text-[10px]">{showPfz ? 'ON' : 'OFF'}</span>
+              </button>
+
+              <button
+                onClick={() => setShowAlerts(!showAlerts)}
+                className={`px-2 py-1 rounded flex items-center justify-between transition-colors cursor-pointer ${
+                  showAlerts ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' : 'bg-white/5 text-white/40'
+                }`}
+              >
+                <span>Hazards</span>
+                <span className="text-[10px]">{showAlerts ? 'ON' : 'OFF'}</span>
+              </button>
+
+              <button
+                onClick={() => setShowProtected(!showProtected)}
+                className={`px-2 py-1 rounded flex items-center justify-between transition-colors cursor-pointer ${
+                  showProtected ? 'bg-purple-500/20 text-purple-300 border border-purple-500/30' : 'bg-white/5 text-white/40'
+                }`}
+              >
+                <span>MPA / Geofence</span>
+                <span className="text-[10px]">{showProtected ? 'ON' : 'OFF'}</span>
+              </button>
+
+              <button
+                onClick={() => setShowSpills(!showSpills)}
+                className={`px-2 py-1 rounded flex items-center justify-between transition-colors cursor-pointer ${
+                  showSpills ? 'bg-rose-500/20 text-rose-300 border border-rose-500/30' : 'bg-white/5 text-white/40'
+                }`}
+                title="PS-26143 Marine Oil Spills"
+              >
+                <span>Oil Spills</span>
+                <span className="text-[10px]">{showSpills ? 'ON' : 'OFF'}</span>
+              </button>
+
+              <button
+                onClick={() => setShowSst(!showSst)}
+                className={`px-2 py-1 rounded flex items-center justify-between transition-colors cursor-pointer ${
+                  showSst ? 'bg-blue-500/20 text-blue-300 border border-blue-500/30' : 'bg-white/5 text-white/40'
+                }`}
+              >
+                <span>SST Contours</span>
+                <span className="text-[10px]">{showSst ? 'ON' : 'OFF'}</span>
+              </button>
+
+              <button
+                onClick={() => setShowChlorophyll(!showChlorophyll)}
+                className={`px-2 py-1 rounded flex items-center justify-between transition-colors cursor-pointer ${
+                  showChlorophyll ? 'bg-teal-500/20 text-teal-300 border border-teal-500/30' : 'bg-white/5 text-white/40'
+                }`}
+              >
+                <span>Chlorophyll</span>
+                <span className="text-[10px]">{showChlorophyll ? 'ON' : 'OFF'}</span>
+              </button>
+            </div>
           </div>
-
-          <div className="grid grid-cols-2 gap-1.5 text-[11px]">
-            <button
-              onClick={() => setShowPfz(!showPfz)}
-              className={`px-2 py-1 rounded flex items-center justify-between transition-colors cursor-pointer ${
-                showPfz ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' : 'bg-white/5 text-white/40'
-              }`}
-            >
-              <span>PFZ Zones</span>
-              <span className="text-[10px]">{showPfz ? 'ON' : 'OFF'}</span>
-            </button>
-
-            <button
-              onClick={() => setShowAlerts(!showAlerts)}
-              className={`px-2 py-1 rounded flex items-center justify-between transition-colors cursor-pointer ${
-                showAlerts ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' : 'bg-white/5 text-white/40'
-              }`}
-            >
-              <span>Hazards</span>
-              <span className="text-[10px]">{showAlerts ? 'ON' : 'OFF'}</span>
-            </button>
-
-            <button
-              onClick={() => setShowProtected(!showProtected)}
-              className={`px-2 py-1 rounded flex items-center justify-between transition-colors cursor-pointer ${
-                showProtected ? 'bg-purple-500/20 text-purple-300 border border-purple-500/30' : 'bg-white/5 text-white/40'
-              }`}
-            >
-              <span>MPA / Geofence</span>
-              <span className="text-[10px]">{showProtected ? 'ON' : 'OFF'}</span>
-            </button>
-
-            <button
-              onClick={() => setShowSpills(!showSpills)}
-              className={`px-2 py-1 rounded flex items-center justify-between transition-colors cursor-pointer ${
-                showSpills ? 'bg-rose-500/20 text-rose-300 border border-rose-500/30' : 'bg-white/5 text-white/40'
-              }`}
-              title="PS-26143 Marine Oil Spills"
-            >
-              <span>Oil Spills</span>
-              <span className="text-[10px]">{showSpills ? 'ON' : 'OFF'}</span>
-            </button>
-
-            <button
-              onClick={() => setShowSst(!showSst)}
-              className={`px-2 py-1 rounded flex items-center justify-between transition-colors cursor-pointer ${
-                showSst ? 'bg-blue-500/20 text-blue-300 border border-blue-500/30' : 'bg-white/5 text-white/40'
-              }`}
-            >
-              <span>SST Contours</span>
-              <span className="text-[10px]">{showSst ? 'ON' : 'OFF'}</span>
-            </button>
-
-            <button
-              onClick={() => setShowChlorophyll(!showChlorophyll)}
-              className={`px-2 py-1 rounded flex items-center justify-between transition-colors cursor-pointer ${
-                showChlorophyll ? 'bg-teal-500/20 text-teal-300 border border-teal-500/30' : 'bg-white/5 text-white/40'
-              }`}
-            >
-              <span>Chlorophyll</span>
-              <span className="text-[10px]">{showChlorophyll ? 'ON' : 'OFF'}</span>
-            </button>
-          </div>
-        </div>
+        )}
       </div>
 
       {/* =======================================================================

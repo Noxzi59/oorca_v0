@@ -10,15 +10,15 @@ export const config = {
   environment: process.env.NODE_ENV || 'development',
   
   // STEP 2: Weather & Atmospheric APIs (OpenWeatherMap API Key)
-  weatherApiKey: process.env.OPENWEATHER_API_KEY || process.env.WEATHER_API_KEY || process.env.VITE_WEATHER_API_KEY || '8c2243561426057c6e8eadd1067ef282',
+  weatherApiKey: (process.env.OPENWEATHER_API_KEY || process.env.WEATHER_API_KEY || '').trim(),
   
-  // STEP 3: Global Fishing Watch (GFW) API Token for Vessel Tracking
-  gfwApiToken: process.env.GFW_API_TOKEN || process.env.VITE_GFW_API_TOKEN || '',
+  // STEP 3: Global Fishing Watch (GFW) API Token for Vessel Tracking & Apparent Fishing Effort
+  gfwApiToken: (process.env.GFW_API_TOKEN || '').trim(),
 
-  // STEP 4: Oceanographic & Hydrodynamic APIs
-  oceanDataApiKey: process.env.OCEAN_DATA_API_KEY || process.env.VITE_OCEAN_DATA_API_KEY || '',
-  noaaApiKey: process.env.NOAA_API_KEY || '',
-  copernicusApiKey: process.env.COPERNICUS_API_KEY || '',
+  // STEP 4: Oceanographic & Marine Observation APIs
+  oceanDataApiKey: (process.env.OCEAN_DATA_API_KEY || '').trim(),
+  noaaApiKey: (process.env.NOAA_API_KEY || '').trim(),
+  copernicusApiKey: (process.env.COPERNICUS_API_KEY || '').trim(),
   
   // STEP 5: In-Memory Caching TTL Configuration
   cache: {

@@ -9,6 +9,7 @@ interface NavItem {
   icon: React.ReactNode;
 }
 
+// STEP 1: Core Navigation Items (Removed Pricing Model and Developer Info per user request)
 const NAV_ITEMS: NavItem[] = [
   { 
     id: 'Home', 
@@ -21,7 +22,7 @@ const NAV_ITEMS: NavItem[] = [
       </svg>
     ) 
   },
-  // STEP 1: Marine Ecosystem Reasoning & Collaborative Agents (PS-26176)
+  // STEP 2: Marine Intelligence Workspace
   { 
     id: 'Intel', 
     label: 'Marine Intelligence',
@@ -34,7 +35,7 @@ const NAV_ITEMS: NavItem[] = [
       </svg>
     ) 
   },
-  // STEP 2: Fishery & Climate Workspace (PS-26176)
+  // STEP 3: Fishery & Climate Workspace
   { 
     id: 'Sim', 
     label: 'Fishery & Climate',
@@ -45,17 +46,7 @@ const NAV_ITEMS: NavItem[] = [
       </svg>
     ) 
   },
-  { 
-    id: 'Pricing', 
-    label: 'Pricing & Data',
-    path: '/pricing', 
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-      </svg>
-    ) 
-  },
-  // STEP 3: Incident Response & Liability Assessment (PS-26143)
+  // STEP 4: Incident Response & Liability Assessment
   { 
     id: 'Alerts', 
     label: 'Incident Response',
@@ -66,18 +57,22 @@ const NAV_ITEMS: NavItem[] = [
         <path d="M13.73 21a2 2 0 0 1-3.46 0" />
       </svg>
     ) 
+  }
+  // STEP 5: PREVIOUS PRICING AND DEV ITEMS (REMOVED AND COMMENTED OUT FOR EASY UPDATE LATER)
+  /*
+  { 
+    id: 'Pricing', 
+    label: 'Pricing & Data',
+    path: '/pricing', 
+    icon: (...) 
   },
   { 
     id: 'Dev', 
     label: 'Developer Info',
     path: '/dev',
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <polyline points="16 18 22 12 16 6" />
-        <polyline points="8 6 2 12 8 18" />
-      </svg>
-    ) 
+    icon: (...) 
   }
+  */
 ];
 
 export default function FloatingNavigationBubble() {

@@ -81,6 +81,13 @@ function renderDataStatusBadge(status: DataStatus) {
           ESTIMATED
         </span>
       );
+    // STEP 2.5: Real Data Honesty - Graceful UNAVAILABLE Status
+    case 'UNAVAILABLE':
+      return (
+        <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-mono-code bg-zinc-800 text-zinc-400 border border-zinc-700">
+          UNAVAILABLE
+        </span>
+      );
     case 'DEMO':
     default:
       return (
@@ -202,7 +209,8 @@ export const MarineConditionsPanel: React.FC<MarineConditionsPanelProps> = ({
               conditions.tidalState,
               conditions.atmosphericVisibility,
               conditions.barometricPressure,
-            ].map((metric) => (
+              conditions.fishingActivity,
+            ].filter(Boolean).map((metric) => (
               <div 
                 key={metric.id}
                 className="rounded-lg border border-white/10 bg-black/40 hover:bg-white/[0.04] p-3 transition-colors text-xs"
@@ -213,7 +221,9 @@ export const MarineConditionsPanel: React.FC<MarineConditionsPanelProps> = ({
                 </div>
 
                 <div className="flex items-baseline justify-between mb-1.5">
-                  <span className="text-lg font-mono-code font-semibold text-white">
+                  <span className={`text-lg font-mono-code font-semibold ${
+                    metric.status === 'UNAVAILABLE' ? 'text-zinc-400 italic text-sm' : 'text-white'
+                  }`}>
                     {metric.value}
                   </span>
                   <span className="text-[10px] font-mono-code text-white/40">
@@ -221,7 +231,14 @@ export const MarineConditionsPanel: React.FC<MarineConditionsPanelProps> = ({
                   </span>
                 </div>
 
-                {metric.details && (
+                {metric.error && (
+                  <div className="mb-2 p-2 rounded bg-amber-500/10 border border-amber-500/20 text-[10px] text-amber-300 font-mono-code flex items-start gap-1.5">
+                    <Info className="w-3 h-3 text-amber-400 shrink-0 mt-0.5" />
+                    <span>{metric.error}</span>
+                  </div>
+                )}
+
+                {metric.details && !metric.error && (
                   <p className="text-[11px] text-white/70 leading-relaxed mb-2 font-geist">
                     {metric.details}
                   </p>

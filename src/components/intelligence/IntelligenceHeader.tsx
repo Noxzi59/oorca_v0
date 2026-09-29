@@ -14,7 +14,9 @@ import {
   Clock, 
   Activity,
   Layers,
-  ChevronRight
+  ChevronRight,
+  // STEP 1.5: Database Guide Icon
+  Database
 } from 'lucide-react';
 
 // =========================================================================
@@ -28,6 +30,8 @@ interface IntelligenceHeaderProps {
   onToggleMapLayers: () => void;
   isConditionsOpen: boolean;
   onToggleConditions: () => void;
+  // STEP 1.6: Database Guide Modal Trigger
+  onOpenDatabaseGuide?: () => void;
 }
 
 // =========================================================================
@@ -41,6 +45,7 @@ export const IntelligenceHeader: React.FC<IntelligenceHeaderProps> = ({
   onToggleMapLayers,
   isConditionsOpen,
   onToggleConditions,
+  onOpenDatabaseGuide,
 }) => {
   const navigate = useNavigate();
 
@@ -105,19 +110,23 @@ export const IntelligenceHeader: React.FC<IntelligenceHeaderProps> = ({
           STEP 5: RIGHT CONTROLS & DUAL-EXPERIENCE INVESTIGATION GATEWAY
           ======================================================================= */}
       <div className="flex items-center gap-2 sm:gap-3">
-        {/* Toggle Conditions Panel Button on Smaller Screens */}
-        <button
-          onClick={onToggleConditions}
-          className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border text-xs font-mono-code transition-all cursor-pointer ${
-            isConditionsOpen 
-              ? 'bg-white text-black border-white font-semibold' 
-              : 'bg-white/5 text-white/80 border-white/10 hover:bg-white/10'
-          }`}
-          title="Toggle Marine Conditions & PFZ Panel"
-        >
-          <Activity className="w-3.5 h-3.5" />
-          <span className="hidden sm:inline">Conditions & PFZ</span>
-        </button>
+        {/* STEP 5.1: Toggle Conditions Button (Commented out in single-column layout for easy update) */}
+        {/* 
+        {onToggleConditions && (
+          <button
+            onClick={onToggleConditions}
+            className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border text-xs font-mono-code transition-all cursor-pointer ${
+              isConditionsOpen 
+                ? 'bg-white text-black border-white font-semibold' 
+                : 'bg-white/5 text-white/80 border-white/10 hover:bg-white/10'
+            }`}
+            title="Toggle Marine Conditions & PFZ Panel"
+          >
+            <Activity className="w-3.5 h-3.5" />
+            <span className="hidden sm:inline">Conditions & PFZ</span>
+          </button>
+        )}
+        */}
 
         {/* Clear / New Conversation Button */}
         <button
@@ -127,6 +136,20 @@ export const IntelligenceHeader: React.FC<IntelligenceHeaderProps> = ({
         >
           <RotateCcw className="w-3.5 h-3.5" />
         </button>
+
+        {/* STEP 5.5: Maritime Database Guide Trigger Button (COMMENTED OUT FOR EASY UPDATE LATER) */}
+        {/* 
+        {onOpenDatabaseGuide && (
+          <button
+            onClick={onOpenDatabaseGuide}
+            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 text-xs font-mono-code transition-all cursor-pointer"
+            title="Open Maritime Database Architecture & Migration Guide"
+          >
+            <Database className="w-3.5 h-3.5 text-cyan-400" />
+            <span className="hidden md:inline">DB Architect</span>
+          </button>
+        )}
+        */}
 
         {/* Dual Mode Switcher: Link to PS-26143 Incident Investigation */}
         <Link

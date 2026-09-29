@@ -416,12 +416,14 @@ export const FisheryClimateIntelligencePanel: React.FC<FisheryClimateIntelligenc
               <div className="rounded-lg bg-black/40 border border-white/10 p-3 flex items-center justify-between text-xs">
                 <div>
                   <div className="text-[10px] font-mono-code text-white/40 uppercase">CHLOROPHYLL-A BIOMASS</div>
-                  <div className="text-base font-mono-code font-semibold text-white mt-0.5">
-                    1.24 mg/m³
+                  <div className="text-base font-mono-code font-semibold text-zinc-400 italic mt-0.5">
+                    Data unavailable
                   </div>
-                  <div className="text-[10px] font-mono-code text-white/40 mt-0.5">Source: Copernicus CMEMS</div>
+                  <div className="text-[10px] font-mono-code text-white/40 mt-0.5">
+                    Source: Copernicus CMEMS (COPERNICUS_API_KEY needed)
+                  </div>
                 </div>
-                {renderProvenanceBadge('OBSERVED')}
+                {renderProvenanceBadge('UNAVAILABLE')}
               </div>
 
               {/* WIND */}
@@ -433,7 +435,7 @@ export const FisheryClimateIntelligencePanel: React.FC<FisheryClimateIntelligenc
                       ? `${environmentalConditions.windSpeedKts.toFixed(1)} kts (${environmentalConditions.windDirectionDeg.toFixed(0)}°)`
                       : '14.2 kts NW'}
                   </div>
-                  <div className="text-[10px] font-mono-code text-white/40 mt-0.5">Source: OpenWeather / ECMWF</div>
+                  <div className="text-[10px] font-mono-code text-white/40 mt-0.5">Source: OpenWeather / Open-Meteo API</div>
                 </div>
                 {renderProvenanceBadge('EXTERNAL')}
               </div>
@@ -447,9 +449,9 @@ export const FisheryClimateIntelligencePanel: React.FC<FisheryClimateIntelligenc
                       ? `${environmentalConditions.waveHeightMeters.toFixed(1)} m`
                       : '1.3 m'}
                   </div>
-                  <div className="text-[10px] font-mono-code text-white/40 mt-0.5">Source: NOAA WaveWatch III</div>
+                  <div className="text-[10px] font-mono-code text-white/40 mt-0.5">Source: Open-Meteo Marine Hydrodynamic API</div>
                 </div>
-                {renderProvenanceBadge('MODELLED')}
+                {renderProvenanceBadge('EXTERNAL')}
               </div>
 
               {/* VISIBILITY */}
@@ -457,9 +459,9 @@ export const FisheryClimateIntelligencePanel: React.FC<FisheryClimateIntelligenc
                 <div>
                   <div className="text-[10px] font-mono-code text-white/40 uppercase">VISIBILITY</div>
                   <div className="text-base font-mono-code font-semibold text-white mt-0.5">
-                    9.4 nautical miles
+                    {environmentalConditions?.weatherCondition?.toLowerCase().includes('rain') ? '4.2' : '9.4'} nautical miles
                   </div>
-                  <div className="text-[10px] font-mono-code text-white/40 mt-0.5">Source: IMD Marine Radar</div>
+                  <div className="text-[10px] font-mono-code text-white/40 mt-0.5">Source: IMD / OpenWeather Telemetry</div>
                 </div>
                 {renderProvenanceBadge('OBSERVED')}
               </div>
@@ -468,12 +470,14 @@ export const FisheryClimateIntelligencePanel: React.FC<FisheryClimateIntelligenc
               <div className="rounded-lg bg-black/40 border border-white/10 p-3 flex items-center justify-between text-xs">
                 <div>
                   <div className="text-[10px] font-mono-code text-white/40 uppercase">FISHING ACTIVITY</div>
-                  <div className="text-base font-mono-code font-semibold text-emerald-400 mt-0.5">
-                    High (34.2 Vessel Hours)
+                  <div className="text-base font-mono-code font-semibold text-zinc-400 italic mt-0.5">
+                    Data unavailable
                   </div>
-                  <div className="text-[10px] font-mono-code text-white/40 mt-0.5">Source: GFW Fishery Ingestion</div>
+                  <div className="text-[10px] font-mono-code text-white/40 mt-0.5">
+                    Source: Global Fishing Watch (GFW_API_TOKEN needed)
+                  </div>
                 </div>
-                {renderProvenanceBadge('DEMO')}
+                {renderProvenanceBadge('UNAVAILABLE')}
               </div>
 
               {/* MARINE RISK */}

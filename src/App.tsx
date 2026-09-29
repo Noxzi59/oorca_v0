@@ -96,10 +96,16 @@ export default function App() {
           {/* STEP 2: Dedicated Marine Intelligence Workspace (PS-26176) */}
           <Route path="/intelligence" element={<IntelligencePage />} />
           <Route path="/simulation" element={<SimulationPage />} />
-          <Route path="/pricing" element={<PricingPage />} />
-          <Route path="/data" element={<Navigate to="/pricing" replace />} />
           <Route path="/alerts" element={<AlertCenterPage />} />
+          
+          {/* STEP 3: PREVIOUS PRICING AND DEV ROUTES (REMOVED & REDIRECTED PER USER REQUEST, COMMENTED FOR EASY UPDATE) */}
+          {/* 
+          <Route path="/pricing" element={<PricingPage />} />
           <Route path="/dev" element={<ComingSoonPage pageType="dev" />} />
+          */}
+          <Route path="/pricing" element={<Navigate to="/simulation" replace />} />
+          <Route path="/data" element={<Navigate to="/simulation" replace />} />
+          <Route path="/dev" element={<Navigate to="/intelligence" replace />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
       </Routes>

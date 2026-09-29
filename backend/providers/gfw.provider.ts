@@ -73,6 +73,8 @@ export interface ApparentFishingEffortResult {
   geoJson: GeoJSON.FeatureCollection;
   source: string;
   isLiveApi: boolean;
+  status?: 'LIVE' | 'DEMO' | 'UNAVAILABLE';
+  notes?: string;
   retrievedAt: string;
 }
 
@@ -497,6 +499,13 @@ export class GfwProvider {
       features,
     };
 
+    // STEP 3.5: Honest provenance label (Never label simulated data as LIVE or EXTERNAL)
+    const hasLiveToken = Boolean(config.gfwApiToken && config.gfwApiToken.length > 30);
+    const sourceLabel = hasLiveToken 
+      ? 'Global Fishing Watch (GFW) Live API' 
+      : 'Global Fishing Watch (GFW) Demo Model';
+    const statusLabel: 'LIVE' | 'DEMO' | 'UNAVAILABLE' = hasLiveToken ? 'LIVE' : 'DEMO';
+
     return {
       success: true,
       center: { lat: centerLat, lng: centerLng },
@@ -506,9 +515,13 @@ export class GfwProvider {
       primaryGearBreakdown: gearBreakdown,
       cells,
       geoJson,
-      source: 'Global Fishing Watch (GFW) Apparent Fishing Effort 4Wings API',
-      isLiveApi: Boolean(config.gfwApiToken && config.gfwApiToken.length > 30),
+      source: sourceLabel,
+      isLiveApi: hasLiveToken,
+      status: statusLabel,
       retrievedAt: new Date().toISOString(),
+      notes: hasLiveToken
+        ? 'Live GFW vessel tracking active via GFW_API_TOKEN'
+        : 'GFW_API_TOKEN not configured in .env. Calibrated demonstration grid active.',
     };
   }
 }

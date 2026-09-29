@@ -94,11 +94,12 @@ export function LiveWeatherMonitor({
   };
 
   // STEP 6: Collapsed View — Sleek Compact Floating Pill Toggle Button
+  // (Positioned below Overlays hub to completely eliminate overlapping boxes)
   if (isCollapsed) {
     return (
       <div 
         id="live-weather-monitor-widget"
-        className="absolute top-3 left-16 z-30 font-geist select-none pointer-events-auto"
+        className="absolute top-14 left-4 z-20 font-geist select-none pointer-events-auto"
       >
         <button
           id="btn-weather-pill-toggle"
@@ -124,11 +125,11 @@ export function LiveWeatherMonitor({
     );
   }
 
-  // STEP 7: Expanded View — Main Weather Capsule Bar
+  // STEP 7: Expanded View — Main Weather Capsule Bar (Stacked cleanly below Overlays hub)
   return (
     <div 
       id="live-weather-monitor-widget"
-      className="absolute top-3 left-16 z-30 font-geist select-none pointer-events-auto max-w-[calc(100vw-320px)] sm:max-w-xl transition-all"
+      className="absolute top-14 left-4 z-20 font-geist select-none pointer-events-auto max-w-[calc(100vw-360px)] sm:max-w-xl transition-all"
     >
       {/* =========================================================================
           STEP 1: PREVIOUS MAIN CARD CONTAINER (COMMENTED OUT FOR EASY UPDATE LATER)

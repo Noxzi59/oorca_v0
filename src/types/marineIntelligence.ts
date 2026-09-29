@@ -12,7 +12,8 @@ export type DataStatus =
   | 'MODELLED' 
   | 'FORECAST' 
   | 'ESTIMATED' 
-  | 'DEMO';
+  | 'DEMO'
+  | 'UNAVAILABLE';
 
 // =========================================================================
 // STEP 2: METOCEAN & MARINE CONDITION METRICS
@@ -27,6 +28,8 @@ export interface MarineMetricItem {
   timestamp: string;
   assessment?: 'optimal' | 'moderate' | 'caution' | 'hazardous';
   details?: string;
+  isAvailable?: boolean;
+  error?: string;
 }
 
 export interface MarineConditionsSnapshot {
@@ -38,6 +41,7 @@ export interface MarineConditionsSnapshot {
   tidalState: MarineMetricItem;
   atmosphericVisibility: MarineMetricItem;
   barometricPressure: MarineMetricItem;
+  fishingActivity?: MarineMetricItem;
   generalSafetySummary: string;
   safetyScorePercentage: number; // 0 - 100
 }

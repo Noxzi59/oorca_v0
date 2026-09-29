@@ -6,6 +6,8 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import * as maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
+// STEP 1: Safe MapLibre configuration and circular error serialization guard
+import { initializeMapLibreWorker, attachSafeMapErrorHandler } from '../../utils/maplibreSetup';
 import { 
   Satellite, 
   Maximize2, 
@@ -147,6 +149,9 @@ export function SatelliteSpillViewer({
         [vesselLng + deltaLng, vesselLat + deltaLat],
       ];
 
+      // STEP 2: Configure MapLibre worker globally
+      initializeMapLibreWorker();
+
       const map = new maplibregl.Map({
         container: mapContainerRef.current,
         style: INCIDENT_MAP_STYLE,
@@ -162,10 +167,8 @@ export function SatelliteSpillViewer({
 
       mapInstanceRef.current = map;
 
-      map.on('error', (e) => {
-        if (e.error?.message?.includes('404')) return;
-        console.warn('[Incident Map Notice]', e);
-      });
+      // STEP 3: Safe error guard (prevents circular structure serialization errors)
+      attachSafeMapErrorHandler(map, '[IncidentMap]');
 
       map.on('load', () => {
         setMapLoaded(true);
@@ -193,7 +196,7 @@ export function SatelliteSpillViewer({
         setMapLoaded(false);
       };
     } catch (err) {
-      console.error('[Incident Map Initialization Error]:', err);
+      console.error('[Incident Map Initialization Error]:', (err as Error)?.message || String(err));
     }
   }, []);
 

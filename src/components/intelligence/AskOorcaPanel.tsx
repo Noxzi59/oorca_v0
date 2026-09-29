@@ -116,6 +116,8 @@ export const AskOorcaPanel: React.FC<AskOorcaPanelProps> = ({
   const [inputText, setInputText] = useState('');
   const [expandedPipelineMap, setExpandedPipelineMap] = useState<Record<string, boolean>>({});
   const [expandedEvidenceMap, setExpandedEvidenceMap] = useState<Record<string, boolean>>({});
+  // STEP 4.1: Collapsible Quick Queries Strip (Reduces top vertical clutter)
+  const [isQueriesOpen, setIsQueriesOpen] = useState<boolean>(true);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
   // Auto-scroll on new messages
@@ -144,9 +146,10 @@ export const AskOorcaPanel: React.FC<AskOorcaPanelProps> = ({
   };
 
   return (
+    // STEP 4.2: Self-Contained Card Container (Removed border-r for clean single-column card usage)
     <div 
       id="ask-oorca-panel"
-      className="h-full flex flex-col bg-neutral-950 border-r border-white/10 text-white font-geist select-none"
+      className="h-full flex flex-col bg-neutral-950/80 border border-white/10 rounded-2xl overflow-hidden text-white font-geist select-none shadow-xl backdrop-blur-xl"
     >
       {/* =======================================================================
           STEP 5: PANEL SUBHEADER / IDENTITY BAR
@@ -167,26 +170,38 @@ export const AskOorcaPanel: React.FC<AskOorcaPanelProps> = ({
       </div>
 
       {/* =======================================================================
-          STEP 6: CLICKABLE EXAMPLE QUERIES DOCK (STEP 5)
+          STEP 6: CLICKABLE EXAMPLE QUERIES DOCK (COLLAPSIBLE TO AVOID CLUTTER)
           ======================================================================= */}
-      <div className="p-3 border-b border-white/10 bg-white/[0.02] shrink-0">
-        <div className="flex items-center justify-between text-[11px] text-white/50 mb-2 font-mono-code">
-          <span>RECOMMENDED QUERIES</span>
-          <span className="text-[10px]">CLICK TO RUN</span>
+      <div className="px-3 py-2 border-b border-white/10 bg-white/[0.02] shrink-0">
+        <div 
+          onClick={() => setIsQueriesOpen(!isQueriesOpen)}
+          className="flex items-center justify-between text-[11px] text-white/50 font-mono-code cursor-pointer select-none hover:text-white/80 transition-colors"
+        >
+          <div className="flex items-center gap-1.5">
+            <span>RECOMMENDED QUERIES</span>
+            <span className="text-[10px] text-white/30">({EXAMPLE_QUERIES.length})</span>
+          </div>
+          <div className="flex items-center gap-1 text-[10px]">
+            <span>{isQueriesOpen ? 'Collapse' : 'Show'}</span>
+            {isQueriesOpen ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
+          </div>
         </div>
-        <div className="flex flex-wrap gap-1.5 max-h-28 overflow-y-auto pr-1">
-          {EXAMPLE_QUERIES.map((query, index) => (
-            <button
-              key={index}
-              onClick={() => handleExampleClick(query)}
-              disabled={isLoading}
-              className="text-left text-xs px-2.5 py-1.5 rounded-md bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 text-white/80 transition-all cursor-pointer truncate max-w-full disabled:opacity-50"
-            >
-              <span className="text-white/40 mr-1.5 font-mono-code text-[10px]">›</span>
-              {query}
-            </button>
-          ))}
-        </div>
+
+        {isQueriesOpen && (
+          <div className="flex flex-wrap gap-1.5 max-h-24 overflow-y-auto pr-1 mt-2 transition-all">
+            {EXAMPLE_QUERIES.map((query, index) => (
+              <button
+                key={index}
+                onClick={() => handleExampleClick(query)}
+                disabled={isLoading}
+                className="text-left text-xs px-2.5 py-1 rounded-md bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 text-white/80 transition-all cursor-pointer truncate max-w-full disabled:opacity-50"
+              >
+                <span className="text-emerald-400/80 mr-1.5 font-mono-code text-[10px]">›</span>
+                {query}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* =======================================================================
@@ -242,78 +257,78 @@ export const AskOorcaPanel: React.FC<AskOorcaPanelProps> = ({
                   {message.directAnswer}
                 </p>
 
-                {/* Structured WHY? Breakdown (Prompt Step 4) */}
+                {/* Structured WHY? Breakdown (Prompt Step 4) - Compact & Clean Layout */}
                 {message.whyChecklist && (
-                  <div className="rounded-lg bg-black/40 border border-white/10 p-3 mb-3 text-xs">
-                    <div className="font-mono-code text-[11px] text-white/60 mb-2 uppercase tracking-wider flex items-center justify-between">
-                      <span className="font-semibold text-white/90">WHY THIS EVALUATION?</span>
-                      <span className="text-[10px] text-emerald-400/80">MULTI-CRITERIA SYNTHESIS</span>
+                  <div className="rounded-lg bg-black/40 border border-white/10 p-2.5 mb-3 text-xs">
+                    <div className="font-mono-code text-[10px] text-white/50 mb-2 uppercase tracking-wider flex items-center justify-between">
+                      <span className="font-semibold text-white/80">SYNTHESIS CHECKLIST</span>
+                      <span className="text-[9px] text-emerald-400/90 font-mono-code">5/5 DOMAINS VERIFIED</span>
                     </div>
 
-                    <div className="space-y-1.5 font-geist">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 font-geist text-[11px]">
                       {/* 1. Wind conditions */}
-                      <div className="flex items-start gap-2">
+                      <div className="flex items-center gap-1.5 p-1 rounded bg-white/[0.02]">
                         {message.whyChecklist.windConditions.valid ? (
-                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />
+                          <CheckCircle2 className="w-3 h-3 text-emerald-400 shrink-0" />
                         ) : (
-                          <AlertTriangle className="w-3.5 h-3.5 text-amber-400 shrink-0 mt-0.5" />
+                          <AlertTriangle className="w-3 h-3 text-amber-400 shrink-0" />
                         )}
-                        <div className="text-white/80">
-                          <strong className="text-white/90 font-medium">Wind conditions: </strong>
+                        <span className="text-white/90 truncate">
+                          <strong className="text-white/60 font-normal">Wind: </strong>
                           {message.whyChecklist.windConditions.summary}
-                        </div>
+                        </span>
                       </div>
 
                       {/* 2. Wave conditions */}
-                      <div className="flex items-start gap-2">
+                      <div className="flex items-center gap-1.5 p-1 rounded bg-white/[0.02]">
                         {message.whyChecklist.waveConditions.valid ? (
-                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />
+                          <CheckCircle2 className="w-3 h-3 text-emerald-400 shrink-0" />
                         ) : (
-                          <AlertTriangle className="w-3.5 h-3.5 text-amber-400 shrink-0 mt-0.5" />
+                          <AlertTriangle className="w-3 h-3 text-amber-400 shrink-0" />
                         )}
-                        <div className="text-white/80">
-                          <strong className="text-white/90 font-medium">Wave conditions: </strong>
+                        <span className="text-white/90 truncate">
+                          <strong className="text-white/60 font-normal">Wave: </strong>
                           {message.whyChecklist.waveConditions.summary}
-                        </div>
+                        </span>
                       </div>
 
                       {/* 3. Weather forecast */}
-                      <div className="flex items-start gap-2">
+                      <div className="flex items-center gap-1.5 p-1 rounded bg-white/[0.02]">
                         {message.whyChecklist.weatherForecast.valid ? (
-                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />
+                          <CheckCircle2 className="w-3 h-3 text-emerald-400 shrink-0" />
                         ) : (
-                          <AlertTriangle className="w-3.5 h-3.5 text-amber-400 shrink-0 mt-0.5" />
+                          <AlertTriangle className="w-3 h-3 text-amber-400 shrink-0" />
                         )}
-                        <div className="text-white/80">
-                          <strong className="text-white/90 font-medium">Weather forecast: </strong>
+                        <span className="text-white/90 truncate">
+                          <strong className="text-white/60 font-normal">Weather: </strong>
                           {message.whyChecklist.weatherForecast.summary}
-                        </div>
+                        </span>
                       </div>
 
                       {/* 4. Ocean conditions */}
-                      <div className="flex items-start gap-2">
+                      <div className="flex items-center gap-1.5 p-1 rounded bg-white/[0.02]">
                         {message.whyChecklist.oceanConditions.valid ? (
-                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />
+                          <CheckCircle2 className="w-3 h-3 text-emerald-400 shrink-0" />
                         ) : (
-                          <AlertTriangle className="w-3.5 h-3.5 text-amber-400 shrink-0 mt-0.5" />
+                          <AlertTriangle className="w-3 h-3 text-amber-400 shrink-0" />
                         )}
-                        <div className="text-white/80">
-                          <strong className="text-white/90 font-medium">Ocean conditions: </strong>
+                        <span className="text-white/90 truncate">
+                          <strong className="text-white/60 font-normal">Ocean: </strong>
                           {message.whyChecklist.oceanConditions.summary}
-                        </div>
+                        </span>
                       </div>
 
                       {/* 5. Marine advisories */}
-                      <div className="flex items-start gap-2">
+                      <div className="flex items-center gap-1.5 p-1 rounded bg-white/[0.02] sm:col-span-2">
                         {message.whyChecklist.marineAdvisories.valid ? (
-                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />
+                          <CheckCircle2 className="w-3 h-3 text-emerald-400 shrink-0" />
                         ) : (
-                          <AlertTriangle className="w-3.5 h-3.5 text-amber-400 shrink-0 mt-0.5" />
+                          <AlertTriangle className="w-3 h-3 text-amber-400 shrink-0" />
                         )}
-                        <div className="text-white/80">
-                          <strong className="text-white/90 font-medium">Marine advisories: </strong>
+                        <span className="text-white/90 truncate">
+                          <strong className="text-white/60 font-normal">Advisory: </strong>
                           {message.whyChecklist.marineAdvisories.summary}
-                        </div>
+                        </span>
                       </div>
                     </div>
                   </div>

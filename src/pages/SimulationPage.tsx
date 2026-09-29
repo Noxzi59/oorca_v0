@@ -28,8 +28,13 @@ import { FloatingQuickToggleHub } from '../components/simulation/FloatingQuickTo
 import { GfwVesselIdentityModal } from '../components/simulation/GfwVesselIdentityModal';
 // STEP 2.6: Maritime Geographic Land Validation (Avoid vessel to locate over land)
 import { isLandLocation, getMaritimeRegionName } from '../utils/geoValidation';
+// STEP 2.7: Maritime Database Architecture & Migration Guide Modal
+import { MaritimeDatabaseGuideModal } from '../components/database/MaritimeDatabaseGuideModal';
 
 export function SimulationPage() {
+  // State: Maritime Database Architecture & Migration Guide
+  const [isDbGuideOpen, setIsDbGuideOpen] = useState<boolean>(false);
+
   // Simulation Inputs & Parameters
   const [parameters, setParameters] = useState<SimulationParameters>(() => {
     const saved = localStorage.getItem('oorca_sim_params');
@@ -317,6 +322,8 @@ export function SimulationPage() {
         onToggleDock={handleToggleDock}
         pageMode={pageMode}
         onTogglePageMode={(mode) => setPageMode(mode)}
+        // STEP 1.5: Database Guide Trigger
+        onOpenDatabaseGuide={() => setIsDbGuideOpen(true)}
       />
 
       {/* 2. Main Workspace: Left Panel + Center Map */}
@@ -445,7 +452,8 @@ export function SimulationPage() {
               onClose={() => setIsTimelineOpen(false)}
               zIndex={focusedPanel === 'timeline' ? 35 : 30}
               onFocus={() => setFocusedPanel('timeline')}
-              initialPosition={{ x: 16, y: 16 }}
+              // STEP 4.2: Positioned in lower quadrant to completely avoid collision with top-left Overlays and Weather
+              initialPosition={{ x: 20, y: 360 }}
             />
 
             {/* Floating Draggable Overlay 2: Concentration Legend */}
@@ -463,7 +471,8 @@ export function SimulationPage() {
               onClose={() => setIsConcentrationOpen(false)}
               zIndex={focusedPanel === 'concentration' ? 35 : 30}
               onFocus={() => setFocusedPanel('concentration')}
-              initialPosition={{ x: 340, y: 16 }}
+              // STEP 4.3: Stacked cleanly below weather with zero horizontal collision
+              initialPosition={{ x: 20, y: 160 }}
             />
 
             {/* Floating Overlay 3: Map Controls (Top Right) */}
@@ -543,6 +552,12 @@ export function SimulationPage() {
             vesselDetails: updatedVessel,
           }));
         }}
+      />
+
+      {/* STEP 10: Maritime Database Architecture & Migration Guide Modal */}
+      <MaritimeDatabaseGuideModal
+        isOpen={isDbGuideOpen}
+        onClose={() => setIsDbGuideOpen(false)}
       />
     </div>
   );

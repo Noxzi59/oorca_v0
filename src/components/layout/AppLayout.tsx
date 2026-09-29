@@ -17,7 +17,8 @@ export const AppLayout: React.FC = () => {
   const location = useLocation();
 
   // STEP 1: Pages that render their own specialized headers (including PS-26176 /intelligence)
-  const hasCustomHeader = ['/', '/intelligence', '/simulation', '/pricing', '/alerts', '/data', '/dev'].includes(location.pathname);
+  // (Pricing and Dev paths commented out for later easy update)
+  const hasCustomHeader = ['/', '/intelligence', '/simulation', '/alerts'/*, '/pricing', '/data', '/dev' */].includes(location.pathname);
 
   return (
     <div className="min-h-screen bg-black text-white font-geist flex flex-col selection:bg-white selection:text-black">

@@ -6,6 +6,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
+// STEP 1: Safe MapLibre configuration and circular error serialization guard
+import { initializeMapLibreWorker, attachSafeMapErrorHandler } from '../../utils/maplibreSetup';
 import { 
   SimulationResult, 
   SimulationParameters,
@@ -471,6 +473,9 @@ export function SimulationMap({
       const initialLng = activeLng;
       const initialLat = activeLat;
 
+      // STEP 2: Configure MapLibre worker globally
+      initializeMapLibreWorker();
+
       // Professional intelligence-platform configuration
       const map = new maplibregl.Map({
         container: mapContainerRef.current,
@@ -486,12 +491,8 @@ export function SimulationMap({
 
       mapInstanceRef.current = map;
 
-      // Error guard
-      map.on('error', (e) => {
-        // Tile 404s on deep zoom are expected on edge ocean areas
-        if (e.error?.message?.includes('404')) return;
-        console.warn('[MapLibre GL Notice]', e);
-      });
+      // STEP 3: Safe error guard (prevents circular structure serialization)
+      attachSafeMapErrorHandler(map, '[SimulationMap]');
 
       // Add navigation controls (Zoom, Compass, Pitch Visualization) to top-right
       const navControl = new maplibregl.NavigationControl({
@@ -542,7 +543,7 @@ export function SimulationMap({
         setMapLoaded(false);
       };
     } catch (err: any) {
-      console.error('[MapLibre Initialization Error]:', err);
+      console.error('[MapLibre Initialization Error]:', err?.message || String(err));
       setWebGlError(err?.message || 'WebGL initialization error');
     }
   }, []);
@@ -1202,6 +1203,12 @@ export function SimulationMap({
         </div>
       `;
 
+      // =========================================================================
+      // STEP 5: VESSEL SVG MARKER REMOVED PER USER REQUEST
+      // Clean UI: avoids visual clustering, clutter, and overlapping info boxes.
+      // (Commented out for easy future updates/reactivation)
+      // =========================================================================
+      /*
       if (vesselMarkerRef.current) {
         // Move vessel smoothly along simulation drift trajectory
         vesselMarkerRef.current.setLngLat([vesselLng, vesselLat]);
@@ -1222,6 +1229,11 @@ export function SimulationMap({
           .setLngLat([vesselLng, vesselLat])
           .setPopup(popup)
           .addTo(map);
+      }
+      */
+      if (vesselMarkerRef.current) {
+        vesselMarkerRef.current.remove();
+        vesselMarkerRef.current = null;
       }
 
     } else {
@@ -1667,11 +1679,12 @@ export function SimulationMap({
 
       {/* =========================================================================
           STEP 6: GFW APPARENT FISHING EFFORT (AFE) FLOATING LEGEND & INSPECTOR
+          Positioned with top-20 margin to avoid overlapping with MapControls (top-4)
           ========================================================================= */}
       {isFishingEffortVisible && (
         <div 
           id="gfw-fishing-effort-hud"
-          className="absolute top-16 right-4 z-20 w-72 rounded-xl bg-black/90 border border-cyan-500/40 p-3 shadow-[0_16px_40px_rgba(0,0,0,0.85)] backdrop-blur-xl text-white font-geist text-xs animate-in fade-in duration-200"
+          className="absolute top-20 right-4 z-20 w-72 rounded-xl bg-black/90 border border-cyan-500/40 p-3 shadow-[0_16px_40px_rgba(0,0,0,0.85)] backdrop-blur-xl text-white font-geist text-xs animate-in fade-in duration-200"
         >
           {/* Header */}
           <div className="flex items-center justify-between pb-2 border-b border-white/10">
@@ -1738,11 +1751,11 @@ export function SimulationMap({
         </div>
       )}
 
-      {/* Selected Cell Inspector Popover */}
+      {/* Selected Cell Inspector Popover (Positioned bottom-12 right-4 to avoid overlapping scale indicator on bottom-left) */}
       {selectedEffortCell && isFishingEffortVisible && (
         <div 
           id="gfw-cell-inspector"
-          className="absolute bottom-14 left-4 z-30 w-72 rounded-xl bg-neutral-950/95 border border-cyan-400/60 p-3 shadow-2xl backdrop-blur-2xl text-white font-geist text-xs animate-in slide-in-from-bottom duration-200"
+          className="absolute bottom-12 right-4 z-30 w-72 rounded-xl bg-neutral-950/95 border border-cyan-400/60 p-3 shadow-2xl backdrop-blur-2xl text-white font-geist text-xs animate-in slide-in-from-bottom duration-200"
         >
           <div className="flex items-center justify-between pb-1.5 border-b border-white/10">
             <div className="flex items-center gap-1.5">

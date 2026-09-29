@@ -15,7 +15,9 @@ import {
   Clock,
   Flame,
   Cloud,
-  Activity
+  Activity,
+  // STEP 2.8: Database Guide Icon
+  Database
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { OorcaBrandLogo } from '../brand/OorcaBrandLogo';
@@ -42,6 +44,8 @@ interface SimulationHeaderProps {
   // STEP 2.5: PS-26176 Fishery & Climate Mode Support
   pageMode?: 'FISHERY_CLIMATE' | 'INCIDENT_RESPONSE';
   onTogglePageMode?: (mode: 'FISHERY_CLIMATE' | 'INCIDENT_RESPONSE') => void;
+  // STEP 2.9: Database Guide Modal Trigger
+  onOpenDatabaseGuide?: () => void;
 }
 
 export function SimulationHeader({
@@ -63,6 +67,8 @@ export function SimulationHeader({
   onToggleDock,
   pageMode = 'FISHERY_CLIMATE',
   onTogglePageMode,
+  // STEP 2.9: Open Database Architecture Guide
+  onOpenDatabaseGuide,
 }: SimulationHeaderProps) {
   const [shareDropdownOpen, setShareDropdownOpen] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -277,6 +283,21 @@ export function SimulationHeader({
           <FileText className="w-3.5 h-3.5 text-white/70" />
           <span className="hidden sm:inline">Export</span>
         </button>
+
+        {/* STEP 2.95: Maritime Database Architecture & Migration Guide Button (COMMENTED OUT FOR EASY UPDATE LATER) */}
+        {/* 
+        {onOpenDatabaseGuide && (
+          <button
+            id="btn-database-guide"
+            onClick={onOpenDatabaseGuide}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 text-cyan-300 hover:text-cyan-200 transition-all cursor-pointer font-mono-code"
+            title="Open Maritime Database Architecture & Migration Guide"
+          >
+            <Database className="w-3.5 h-3.5 text-cyan-400" />
+            <span className="hidden md:inline">DB Architect</span>
+          </button>
+        )}
+        */}
 
         {/* Share Dropdown */}
         <div className="relative">

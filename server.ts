@@ -5,6 +5,7 @@
 
 import express from 'express';
 import path from 'path';
+import fs from 'fs';
 import { createServer as createViteServer } from 'vite';
 import simulationRoutes from './backend/api/simulation.routes';
 import environmentRoutes from './backend/api/environment.routes';
@@ -53,6 +54,48 @@ async function startServer() {
 
   // Dedicated Maritime Vessel Search & Identity Resolution endpoint (Section 17 requirement)
   app.get('/api/vessels/search', EnvironmentController.getVesselIdentity);
+
+  // =========================================================================
+  // STEP 3: SERVE MAPLIBRE GL WORKER & SHARED SCRIPTS WITH STRICT JAVASCRIPT MIME TYPE
+  // Prevents "Worker failed to load" and circular serialization errors in bundler/iframe
+  // =========================================================================
+  app.get(['/maplibre-gl-worker.mjs', '/maplibre-gl-worker.js'], (req, res) => {
+    const workerPathInPublic = path.join(process.cwd(), 'public/maplibre-gl-worker.mjs');
+    const workerPathInDist = path.join(process.cwd(), 'dist/maplibre-gl-worker.mjs');
+    const workerPathInNodeModules = path.join(process.cwd(), 'node_modules/maplibre-gl/dist/maplibre-gl-worker.mjs');
+
+    let target = workerPathInPublic;
+    if (fs.existsSync(workerPathInPublic)) {
+      target = workerPathInPublic;
+    } else if (fs.existsSync(workerPathInDist)) {
+      target = workerPathInDist;
+    } else if (fs.existsSync(workerPathInNodeModules)) {
+      target = workerPathInNodeModules;
+    }
+
+    res.setHeader('Content-Type', 'text/javascript');
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.sendFile(target);
+  });
+
+  app.get(['/maplibre-gl-shared.mjs', '/maplibre-gl-shared.js'], (req, res) => {
+    const sharedPathInPublic = path.join(process.cwd(), 'public/maplibre-gl-shared.mjs');
+    const sharedPathInDist = path.join(process.cwd(), 'dist/maplibre-gl-shared.mjs');
+    const sharedPathInNodeModules = path.join(process.cwd(), 'node_modules/maplibre-gl/dist/maplibre-gl-shared.mjs');
+
+    let target = sharedPathInPublic;
+    if (fs.existsSync(sharedPathInPublic)) {
+      target = sharedPathInPublic;
+    } else if (fs.existsSync(sharedPathInDist)) {
+      target = sharedPathInDist;
+    } else if (fs.existsSync(sharedPathInNodeModules)) {
+      target = sharedPathInNodeModules;
+    }
+
+    res.setHeader('Content-Type', 'text/javascript');
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.sendFile(target);
+  });
 
   // Vite middleware for development vs Static file serving for production
   if (process.env.NODE_ENV !== 'production') {
