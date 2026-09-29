@@ -1,0 +1,8 @@
+{
+  "name": "oorca_v0",
+  "description": "OORCA combines satellite Earth Observation, oceanographic data, weather intelligence, vessel activity and geospatial reasoning into a unified marine intelligence platform.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
