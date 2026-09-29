@@ -1,444 +1,736 @@
 # OORCA
 
-### Oceanic Oil Reconnaissance, Correlation & Attribution
+### Marine Intelligence for a Changing Ocean
 
-> A marine intelligence platform for oil-spill detection, drift
-> reconstruction, AIS correlation, vessel attribution, and environmental
-> impact analysis.
+OORCA is a marine intelligence platform that brings together **satellite
+observations, fishing activity, weather, ocean conditions, geospatial
+data, and conversational AI** in one place.
 
-[![SIH PS
-26143](https://img.shields.io/badge/Smart%20India%20Hackathon-PS%2026143-0B7285?style=for-the-badge)](#-smart-india-hackathon)
-[![Apache
-2.0](https://img.shields.io/badge/License-Apache%202.0-blue?style=for-the-badge)](LICENSE)
-[![Node.js](https://img.shields.io/badge/Node.js-18%2B-339933?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/)
-[![React](https://img.shields.io/badge/React-TypeScript-61DAFB?style=for-the-badge&logo=react&logoColor=111)](https://react.dev/)
+Instead of forcing users to search through different datasets, OORCA
+turns marine data into something easier to understand:
 
-OORCA brings satellite observations, oceanographic conditions, vessel
-movement, and environmental data into one investigation workflow.
-
-The basic question is simple:
-
-> An oil slick was observed. Where did it come from, how could it have
-> moved, and which vessels were relevant during that window?
-
-OORCA is designed around Smart India Hackathon Problem Statement 26143,
-associated with the National Technical Research Organisation (NTRO).
+**Observe → Detect → Correlate → Reason → Explain**
 
 ------------------------------------------------------------------------
 
-# LIVE DEMO
-
-## OORCA is live on the web
-
-Explore the OORCA investigation workspace:
-
-**[Launch OORCA Live
-Demo](https://oorca-v1-foemtitw9-yamiyprivate-6825.vercel.app/)**
-
-The live deployment is provided as an interactive feature demonstration
-of OORCA's investigation workflow and interface. It showcases selected
-capabilities including spill visualisation, drift simulation, AIS
-correlation, trajectory analysis and environmental layers.
-
-**Important:** The public demo is a limited deployment intended for
-feature exploration and demonstration. It does not represent the
-complete operational OORCA system and does not contain the full
-real-time data pipeline, continuous data ingestion or complete AI/ML
-capabilities.
-
-The full OORCA architecture is designed to work with live satellite
-observations, AIS feeds, environmental data and production-grade
-processing services. Availability of these capabilities depends on the
-deployment environment, external data providers and required API
-services.
-
-The live demo lets you explore what OORCA looks and feels like, while
-the full system represents the complete investigation platform.
-
-**Public Demo:** Available\
-**Full Real-Time Data Pipeline:** Deployment dependent\
-**Complete AI/ML Pipeline:** Development / production integration\
-**Purpose:** Feature demonstration and investigation workflow
+```{=html}
+<p align="center">
+```
+`<img src="public/assets/images/oorca-logo.png" alt="OORCA Logo" width="180">`{=html}
+```{=html}
+</p>
+```
+```{=html}
+<p align="center">
+```
+`<strong>`{=html}Understand the ocean. Connect the data. Make better
+decisions.`</strong>`{=html}
+```{=html}
+</p>
+```
+```{=html}
+<p align="center">
+```
+`<a href="#what-is-oorca">`{=html}What is OORCA?`</a>`{=html} ·
+`<a href="#features">`{=html}Features`</a>`{=html} ·
+`<a href="#how-it-works">`{=html}How it works`</a>`{=html} ·
+`<a href="#getting-started">`{=html}Getting started`</a>`{=html}
+```{=html}
+</p>
+```
 
 ------------------------------------------------------------------------
 
-# What OORCA does
+## What is OORCA?
 
-  -----------------------------------------------------------------------
-  Capability                          Purpose
-  ----------------------------------- -----------------------------------
-  Oil-Spill Detection                 Identify and characterise potential
-                                      oil slicks from SAR / EO imagery
+Marine information is spread across many different systems.
 
-  Drift Simulation                    Model spill movement using wind,
-                                      currents and marine conditions
+Satellite imagery tells us what is happening on the surface.
 
-  Hindcasting                         Estimate a possible spill origin
-                                      and time window
+Weather services tell us about atmospheric conditions.
 
-  Forecasting                         Project possible future movement of
-                                      the spill
+Oceanographic data tells us about the sea.
 
-  AIS Correlation                     Reconstruct vessel traffic around
-                                      the estimated source window
+Fishing datasets show human activity.
 
-  Vessel Attribution                  Filter and score relevant candidate
-                                      vessels
+GIS layers tell us about boundaries, protected areas, and other
+geographic constraints.
 
-  Impact Analysis                     Examine potential exposure of
-                                      marine and coastal resources
+OORCA brings these pieces together and adds a conversational reasoning
+layer on top.
 
-  Geospatial Workspace                Explore the investigation through
-                                      an interactive map
-  -----------------------------------------------------------------------
+A user can ask:
+
+> **"Is it safe to go fishing tomorrow?"**
+
+or:
+
+> **"Where is fishing activity highest?"**
+
+or:
+
+> **"Why was this marine region flagged?"**
+
+OORCA can combine the relevant information and present the result
+through maps, indicators, evidence, and a natural-language explanation.
 
 ------------------------------------------------------------------------
 
-# Investigation Workflow
+## Built for Marine Intelligence
+
+OORCA is being developed around **Smart India Hackathon Problem
+Statement 26176**:
+
+> **ORCA --- Marine EcOsystem Reasoning with Collaborative Agents**
+
+The platform focuses on the core challenge described by the problem
+statement:
+
+-   Understanding natural-language marine queries
+-   Discovering relevant datasets
+-   Combining heterogeneous marine information
+-   Performing spatial and temporal reasoning
+-   Providing explainable recommendations
+-   Supporting fishermen and marine operators
+-   Visualizing information through maps and dashboards
+-   Providing marine safety and environmental context
+
+OORCA also retains its earlier **marine incident investigation**
+capabilities as a separate workflow.
+
+------------------------------------------------------------------------
+
+# The OORCA Idea
+
+``` text
+                   USER QUESTION
+                         │
+                         ▼
+                ┌─────────────────┐
+                │  OORCA AI LAYER │
+                └────────┬────────┘
+                         │
+              Understand user intent
+                         │
+          ┌──────────────┼──────────────┐
+          ▼              ▼              ▼
+       WEATHER          GFW          SATELLITE
+          │              │              │
+          ▼              ▼              ▼
+       OCEAN DATA      FISHING       ANOMALIES
+          │              │              │
+          └──────────────┼──────────────┘
+                         ▼
+                CONTEXTUAL REASONING
+                         │
+                         ▼
+              MAP + EVIDENCE + ANSWER
+```
+
+The important part is not a single dataset.
+
+It is the **correlation between datasets**.
+
+------------------------------------------------------------------------
+
+# Features
+
+## 1. Marine Intelligence
+
+The `/intelligence` workspace is the conversational entry point to
+OORCA.
+
+It combines:
+
+-   Natural-language interaction
+-   Marine conditions
+-   Environmental observations
+-   Fishing information
+-   Geospatial context
+-   Safety information
+-   Evidence and reasoning
+-   Interactive marine maps
+
+### Example questions
+
+``` text
+Where is the nearest Potential Fishing Zone?
+
+Is it safe to venture into the sea tomorrow?
+
+What are the sea conditions near my location?
+
+Are there any weather risks?
+
+Where is fishing activity highest?
+
+Why was this area flagged?
+
+Which areas should be avoided?
+```
+
+------------------------------------------------------------------------
+
+## 2. Fishery & Climate Intelligence
+
+The `/simulation` workspace is being evolved into a broader **Fishery &
+Climate Intelligence** view.
+
+Instead of focusing on a single marine event, the page brings together:
+
+-   Fishing activity
+-   Fishing effort
+-   Weather
+-   Wind
+-   Marine conditions
+-   Environmental indicators
+-   Marine anomalies
+-   Geospatial context
+
+The map acts as the main workspace.
+
+> **One map. Multiple sources. One explanation.**
+
+### Screenshot
+
+Add the latest UI screenshot here:
+
+``` text
+docs/screenshots/fishery-climate.png
+```
+
+![Fishery & Climate Intelligence](docs/screenshots/fishery-climate.png)
+
+------------------------------------------------------------------------
+
+## 3. Marine Anomaly Detection
+
+OORCA can use satellite/SAR analysis to identify unusual surface
+observations.
+
+The current ML capability was developed around oil-slick/leak detection.
+In the broader Marine Intelligence workflow, the result can be treated
+as a **SAR anomaly candidate** and then examined alongside other
+information.
+
+The important idea is:
+
+``` text
+SAR observation
+      +
+Weather
+      +
+Fishing activity
+      +
+Ocean conditions
+      +
+Geospatial context
+      ↓
+OORCA reasoning
+```
+
+This prevents a single observation from being treated as the complete
+answer.
+
+### Screenshot
+
+``` text
+docs/screenshots/anomaly-detection.png
+```
+
+![Marine Anomaly Detection](docs/screenshots/anomaly-detection.png)
+
+------------------------------------------------------------------------
+
+## 4. Global Fishing Watch Integration
+
+OORCA includes backend integration for fishing and vessel intelligence.
+
+Current API routes include:
+
+``` text
+GET /api/environment/fishing-effort
+GET /api/environment/vessels
+GET /api/environment/vessels/identity
+POST /api/environment/vessels/risk-assessment
+```
+
+Fishing information can be used to understand:
+
+-   Fishing activity
+-   Fishing effort
+-   Activity hotspots
+-   Vessel presence
+-   Spatial relationships between fishing and environmental conditions
+
+Where an external dataset is unavailable, the interface should clearly
+identify modelled/demo information rather than presenting it as live
+data.
+
+------------------------------------------------------------------------
+
+## 5. Weather Intelligence
+
+OORCA provides a normalized weather endpoint:
+
+``` text
+GET /api/environment/weather
+```
+
+Weather information can contribute:
+
+-   Temperature
+-   Wind
+-   Precipitation
+-   Pressure
+-   Visibility
+-   Forecast information
+-   Weather risk
+
+Weather becomes more useful when combined with other marine information.
+
+For example:
+
+``` text
+High fishing activity
+        +
+Strong winds
+        +
+Poor visibility
+        ↓
+Higher operational risk
+```
+
+------------------------------------------------------------------------
+
+## 6. Ocean & Environmental Data
+
+OORCA includes services for oceanographic and environmental information.
+
+Depending on the configured data providers, the system can work with
+information such as:
+
+-   Sea surface temperature
+-   Chlorophyll
+-   Ocean currents
+-   Wave conditions
+-   Tidal information
+-   Visibility
+-   Environmental indicators
+
+The application distinguishes between:
+
+  Status          Meaning
+  --------------- -----------------------------------
+  `LIVE`          Current external feed
+  `OBSERVED`      Observation
+  `FORECAST`      Forecast/model output
+  `MODELLED`      Generated by a model
+  `ESTIMATED`     Estimated value
+  `DEMO`          Demonstration data
+  `UNAVAILABLE`   Data source currently unavailable
+
+This distinction is important because **modelled data is not the same as
+observed data**.
+
+------------------------------------------------------------------------
+
+# OORCA Reasoning
+
+One of the main ideas behind OORCA is that retrieving data is not
+enough.
+
+The system should explain **why** a recommendation was produced.
+
+For example:
+
+``` text
+WHY WAS THIS AREA FLAGGED?
+
+✓ Satellite observation
+✓ Fishing activity
+✓ Weather conditions
+✓ Ocean conditions
+✓ Geographic context
+
+OORCA assessment:
+
+The observed marine anomaly overlaps an area
+with elevated fishing activity.
+
+Weather conditions are currently moderate.
+
+No available geographic restriction was detected.
+
+Assessment:
+Requires further investigation.
+```
+
+The exact explanation depends on the data available for the selected
+location.
+
+------------------------------------------------------------------------
+
+# Conversational AI
+
+OORCA includes an `Ask OORCA` interface.
+
+The conversational layer is designed to turn a natural-language question
+into a marine information workflow.
+
+``` text
+User
+ │
+ ▼
+Intent
+ │
+ ▼
+Required data
+ │
+ ├── Weather
+ ├── Fishing
+ ├── Ocean
+ ├── Satellite
+ └── GIS
+ │
+ ▼
+Reasoning
+ │
+ ▼
+Evidence
+ │
+ ▼
+Answer
+```
+
+This is the foundation for the collaborative-agent architecture
+described in SIH PS-26176.
+
+------------------------------------------------------------------------
+
+# Interactive Maps
+
+Maps are a central part of the OORCA experience.
+
+Depending on the active workspace, the map can display:
+
+-   Marine anomalies
+-   Fishing activity
+-   Vessel activity
+-   Weather context
+-   Marine conditions
+-   Environmental indicators
+-   Protected areas
+-   Restricted zones
+-   Investigation layers
+
+### Screenshot
+
+``` text
+docs/screenshots/marine-map.png
+```
+
+![OORCA Marine Map](docs/screenshots/marine-map.png)
+
+------------------------------------------------------------------------
+
+# Marine Safety & Risk
+
+OORCA can surface marine hazards and operational risks.
+
+Examples include:
+
+-   High winds
+-   High waves
+-   Lightning
+-   Cyclones
+-   Heavy rain
+-   Navigation risk
+-   Restricted waters
+-   Protected areas
+-   Environmental risk
+
+The goal is not simply to display an alert.
+
+The goal is to provide the surrounding context.
+
+``` text
+HAZARD
+  ↓
+LOCATION
+  ↓
+TIME
+  ↓
+MARINE CONDITIONS
+  ↓
+USER CONTEXT
+  ↓
+EXPLAINED RISK
+```
+
+------------------------------------------------------------------------
+
+# Geospatial Reasoning
+
+Marine decisions depend heavily on location.
+
+OORCA can combine geographic information with marine observations to
+identify relationships such as:
+
+``` text
+Fishing activity
+       │
+       ├──── Marine Protected Area
+       │
+       ├──── Restricted waters
+       │
+       ├──── Weather hazard
+       │
+       └──── Environmental anomaly
+```
+
+This allows the platform to move from:
+
+> "There is an alert."
+
+to:
+
+> "This alert matters because it affects this particular area and
+> activity."
+
+------------------------------------------------------------------------
+
+# Two OORCA Workflows
+
+OORCA currently contains two closely related operational workflows.
+
+## Marine Intelligence --- PS 26176
+
+``` text
+Ask OORCA
+    ↓
+Marine Data
+    ↓
+Correlation
+    ↓
+Reasoning
+    ↓
+Recommendation
+```
+
+Designed for:
+
+-   Fishermen
+-   Researchers
+-   Maritime operators
+-   Coastal authorities
+-   Environmental users
+-   Disaster-management stakeholders
+
+## Incident Investigation
+
+The original OORCA investigation workflow remains available for marine
+incident analysis.
+
+It includes capabilities such as:
+
+-   Satellite/SAR analysis
+-   Drift modelling
+-   Historical AIS correlation
+-   Vessel investigation
+-   Environmental impact analysis
+
+These capabilities are kept separate so that the Marine Intelligence
+experience remains simple.
+
+------------------------------------------------------------------------
+
+# System Architecture
 
 ``` mermaid
-flowchart LR
-    A["Satellite Imagery"] --> B["Oil Spill Detection"]
-    B --> C["Slick Characterisation"]
+flowchart TB
 
-    C --> D["Wind + Ocean Currents"]
-    D --> E["Hindcast"]
+    U["User"]
 
-    E --> F["Estimated Origin + Time Window"]
-    E --> G["Forecast"]
+    UI["OORCA Web Interface<br/>React + TypeScript"]
 
-    F --> H["Historical AIS"]
-    H --> I["Traffic Filtering"]
+    AI["Conversational Intelligence<br/>Ask OORCA"]
 
-    I --> J["Spatio-Temporal Correlation"]
-    J --> K["Candidate Vessel Scoring"]
+    MAP["Geospatial Visualization<br/>MapLibre / Leaflet"]
 
-    G --> L["Environmental Impact"]
-    K --> L
+    API["OORCA Backend<br/>Express + TypeScript"]
 
-    L --> M["Investigation Workspace"]
-```
+    GFW["Global Fishing Watch"]
+    WX["Weather Provider"]
+    NOAA["NOAA"]
+    OCEAN["Ocean / Marine Data"]
+    SAT["Satellite / SAR"]
+    GIS["GIS / Geographic Data"]
 
-### The short version
+    U --> UI
 
-``` text
-Satellite
-   ↓
-Spill Detection
-   ↓
-Spill Characterisation
-   ↓
-Hindcasting
-   ↓
-Origin + Time Window
-   ├──→ Forecast
-   │
-   └──→ Historical AIS
-             ↓
-        Traffic Filtering
-             ↓
-    Spatio-Temporal Correlation
-             ↓
-       Candidate Vessels
-             ↓
-       Impact Assessment
+    UI --> AI
+    UI --> MAP
+    UI --> API
+
+    API --> GFW
+    API --> WX
+    API --> NOAA
+    API --> OCEAN
+    API --> SAT
+    API --> GIS
+
+    AI --> API
+    API --> AI
+
+    MAP --> API
 ```
 
 ------------------------------------------------------------------------
 
-# 01 --- Oil-Spill Detection
+# Technology Stack
 
-OORCA is designed around Synthetic Aperture Radar (SAR) and other Earth
-Observation imagery.
-
-A detected slick can be represented using:
-
--   Geographic location
--   Estimated extent
--   Geometry
--   Concentration zones
--   Estimated spill age where the available data supports it
-
-## Key data source
-
-Sentinel-1 SAR is a central part of the project's satellite-data
-workflow.
-
-The project can also work with demonstration datasets such as the
-Sentinel-1 SAR Oil Spill Dataset.
-
-------------------------------------------------------------------------
-
-# 02 --- Drift Reconstruction
-
-A satellite image gives you a snapshot.
-
-It doesn't tell you where the oil came from.
-
-OORCA uses environmental conditions to model possible spill movement.
-
-## Hindcasting
-
-The simulation runs backwards from the observed spill to estimate:
-
--   Possible source region
--   Relevant time window
--   Potential movement path
-
-## Forecasting
-
-The simulation can also run forward to estimate:
-
--   Future plume movement
--   Potential affected areas
--   Possible shoreline arrival windows
-
-The current interface supports a 72-hour simulation timeline.
-
-> Modelled movement is not the same thing as observed movement.
-
-That distinction is intentionally preserved in the application.
-
-------------------------------------------------------------------------
-
-# 03 --- AIS Correlation
-
-Once a possible origin and time window are available, OORCA can examine
-vessel traffic around that region.
-
-The system can consider:
-
--   Distance from the estimated source
--   Vessel position
--   Time overlap
--   Trajectory overlap
--   Spatial proximity
--   Movement patterns
--   Behavioural indicators
-
-The objective is to reduce a large amount of vessel traffic into a
-smaller set of investigation candidates.
-
-It does not automatically establish legal responsibility.
-
-------------------------------------------------------------------------
-
-# 04 --- Environmental Impact
-
-The spill trajectory can be compared with environmental and coastal
-information to understand what could potentially be exposed.
-
-Possible analysis includes:
-
--   Marine habitats
--   Ecological resources
--   Coastal areas
--   Shoreline exposure
--   Estimated coastal arrival
--   Environmental risk
--   Human-health risk
-
-This adds another question to the investigation:
-
-> If the spill continues along this path, what could it reach?
-
-------------------------------------------------------------------------
-
-# Interactive Investigation Workspace
-
-OORCA is built around an interactive map and simulation workspace.
-
-Depending on the available data, the interface can display:
-
--   Spill source
--   Spill extent
--   Plume contours
--   Simulated trajectory
--   Vessel positions
--   Vessel tracks
--   Environmental overlays
--   Ecological resources
--   Simulation timeline
-
-The application also provides analytical information such as:
-
--   Spill statistics
--   Weathering estimates
--   Ecological risk
--   Estimated shoreline impact
-
-The map is the workspace. The analysis sits around it.
-
-------------------------------------------------------------------------
-
-# Data Architecture
-
-OORCA combines several data categories rather than relying on one
-dataset.
-
-## Satellite
-
--   Sentinel-1 SAR
--   Earth Observation imagery
--   Sentinel-1 SAR Oil Spill Dataset
-
-## AIS
-
--   Historical vessel tracks
--   MarineCadastre AIS sample data
--   Real AIS feeds where available
--   Synthetic AIS for demonstrations
-
-## Environmental
-
--   Ocean currents
--   Wind
--   Weather
--   Sea-state / marine conditions
-
-## Impact
-
--   Coastal locations
--   Marine habitats
--   Ecological resources
--   Shoreline information
-
-------------------------------------------------------------------------
-
-# Simulation & Production Path
-
-The current simulation combines environmental drift with oil-spreading
-and weathering calculations.
-
-For a production-oriented implementation, the modelling layer can be
-extended with specialised systems such as:
-
--   OpenDrift
--   OpenOil
--   Copernicus Marine
--   NOAA environmental datasets
--   Live AIS providers
--   Automated Sentinel-1 processing pipelines
-
-The important distinction:
-
-``` text
-Observed Data
-     ≠
-Modelled Data
-     ≠
-Synthetic / Demo Data
-```
-
-OORCA's fallback workflow is intended to keep the application
-demonstrable when external services or live datasets are unavailable,
-while keeping estimated results distinguishable from real observations.
-
-------------------------------------------------------------------------
-
-# Smart India Hackathon
-
-## Problem Statement 26143
-
-OORCA is structured around SIH Problem Statement 26143 from the National
-Technical Research Organisation (NTRO).
-
-The problem requires a pipeline that can:
-
-  -----------------------------------------------------------------------
-  Requirement                         OORCA
-  ----------------------------------- -----------------------------------
-  Detect oil spills from satellite    SAR / EO workflow
-  imagery                             
-
-  Characterise the spill              Slick characterisation
-
-  Estimate the origin                 Hindcasting
-
-  Use oceanographic and               Environmental drift model
-  meteorological data                 
-
-  Predict future movement             Forecasting
-
-  Reconstruct historic AIS traffic    AIS correlation
-
-  Remove irrelevant traffic           Traffic filtering
-
-  Analyse vessel proximity and        Spatio-temporal analysis
-  trajectories                        
-
-  Score potential vessels             Candidate scoring
-
-  Present results visually            Interactive investigation workspace
-  -----------------------------------------------------------------------
-
-## SIH-aligned pipeline
-
-``` text
-SAR / EO
-   ↓
-Spill Detection
-   ↓
-Spill Characterisation
-   ↓
-Hindcasting
-   ↓
-Origin + Time Estimation
-   ↓
-Forecasting
-   ↓
-AIS Reconstruction
-   ↓
-Traffic Filtering
-   ↓
-Spatio-Temporal Correlation
-   ↓
-Vessel Attribution
-   ↓
-Environmental Impact
-```
-
-------------------------------------------------------------------------
-
-# Technology
-
-OORCA uses a web-based geospatial architecture with scientific and
-data-processing components.
-
-## Frontend
+### Frontend
 
 -   React
 -   TypeScript
 -   Vite
--   Interactive mapping
--   WebGL
+-   Tailwind CSS
+-   React Router
+-   Lucide React
+-   MapLibre GL
+-   Leaflet
+-   Motion
 
-## Data & Backend
+### Backend
 
--   Python-based processing
--   Geospatial analysis
--   PostgreSQL / PostGIS
+-   Node.js
+-   Express
+-   TypeScript
+-   TSX
 -   REST APIs
--   Environment-based configuration
 
-## Scientific / Geospatial
+### Intelligence
 
--   Sentinel-1 SAR
--   AIS trajectory data
--   Oceanographic datasets
--   Wind and weather data
--   OpenDrift / OpenOil integration path
--   Spatial and temporal correlation
+-   Gemini API / conversational intelligence
+-   Existing OORCA analysis services
+-   SAR/EO model integration
+-   Geospatial reasoning
 
-> The exact services enabled depend on the deployment and available API
-> credentials.
+### Data
 
-## Deployment note
+-   Global Fishing Watch
+-   Weather services
+-   NOAA
+-   Oceanographic data services
+-   Satellite Earth Observation
+-   GIS datasets
 
-The public demo is intentionally lightweight and focuses on
-demonstrating the OORCA investigation experience. Production deployments
-can connect additional live data sources, processing services and AI/ML
-pipelines depending on available infrastructure and API access.
+------------------------------------------------------------------------
+
+# Project Structure
+
+``` text
+OORCA/
+│
+├── backend/
+│   ├── api/
+│   │   ├── alerts.routes.ts
+│   │   ├── environment.routes.ts
+│   │   ├── intelligence.routes.ts
+│   │   └── simulation.routes.ts
+│   │
+│   ├── controllers/
+│   ├── providers/
+│   │   ├── gfw.provider.ts
+│   │   ├── weather.provider.ts
+│   │   ├── ocean.provider.ts
+│   │   ├── geographic.provider.ts
+│   │   └── noaaAlerts.provider.ts
+│   │
+│   ├── services/
+│   ├── models/
+│   ├── types/
+│   └── utils/
+│
+├── src/
+│   ├── components/
+│   │   ├── intelligence/
+│   │   ├── simulation/
+│   │   ├── alerts/
+│   │   ├── layout/
+│   │   └── brand/
+│   │
+│   ├── pages/
+│   │   ├── IntelligencePage.tsx
+│   │   ├── SimulationPage.tsx
+│   │   └── AlertCenterPage.tsx
+│   │
+│   ├── services/
+│   ├── data/
+│   ├── types/
+│   └── utils/
+│
+├── public/
+│   └── assets/
+│
+├── server.ts
+├── package.json
+├── vite.config.ts
+└── .env.example
+```
+
+------------------------------------------------------------------------
+
+# Main Routes
+
+  Route             Purpose
+  ----------------- ------------------------------------------------
+  `/`               OORCA landing page
+  `/intelligence`   Marine Intelligence & conversational workspace
+  `/simulation`     Fishery & Climate / marine analysis workspace
+  `/alerts`         Marine alerts and incident workflow
+
+------------------------------------------------------------------------
+
+# API Routes
+
+### Intelligence
+
+``` text
+POST /api/intelligence/query
+GET  /api/intelligence/conditions
+```
+
+### Environment
+
+``` text
+GET  /api/environment
+GET  /api/environment/weather
+GET  /api/environment/vessels
+GET  /api/environment/vessels/identity
+POST /api/environment/vessels/risk-assessment
+GET  /api/environment/fishing-effort
+```
+
+### Alerts
+
+``` text
+GET  /api/alerts/incidents
+GET  /api/alerts/incident/:id
+POST /api/alerts/scan
+GET  /api/alerts/sources
+```
+
+### Simulation
+
+``` text
+POST /api/simulation/start
+GET  /api/simulation
+GET  /api/simulation/:id
+GET  /api/simulation/:id/timeline
+GET  /api/simulation/:id/measurements
+```
 
 ------------------------------------------------------------------------
 
@@ -446,15 +738,33 @@ pipelines depending on available infrastructure and API access.
 
 ## Requirements
 
+Install:
+
 -   Node.js 18+
--   npm 9+
--   Modern browser with WebGL support
+-   npm
+-   Git
+
+Check your versions:
+
+``` bash
+node --version
+npm --version
+```
+
+------------------------------------------------------------------------
 
 ## Installation
 
+Clone the repository:
+
 ``` bash
-git clone https://github.com/yamiy-D/OORCA-V.1.git
-cd OORCA-V.1
+git clone <YOUR_REPOSITORY_URL>
+cd OORCA
+```
+
+Install dependencies:
+
+``` bash
 npm install
 ```
 
@@ -464,166 +774,356 @@ Create your environment file:
 cp .env.example .env
 ```
 
-On Windows, create `.env` from `.env.example` manually if needed.
+On Windows PowerShell:
 
-Add the API credentials required by the services enabled in your local
-build.
+``` powershell
+Copy-Item .env.example .env
+```
 
-Start the development server:
+Add your API credentials.
+
+Then start OORCA:
 
 ``` bash
 npm run dev
 ```
 
-Open the local address printed by Vite.
+Open:
 
-------------------------------------------------------------------------
-
-# Environment Configuration
-
-Keep secrets inside `.env`.
-
-Never commit API keys, tokens, or private credentials.
-
-The repository's `.env.example` should be treated as the source of truth
-for the variables required by the current build.
-
-Example structure:
-
-``` env
-VITE_MAP_API_KEY=
-VITE_WEATHER_API_KEY=
-VITE_AIS_API_KEY=
+``` text
+http://localhost:3000
 ```
 
-Do not copy these names blindly if your current `.env.example` uses
-different variables.
+------------------------------------------------------------------------
+
+# Environment Variables
+
+OORCA is designed to use external services through environment
+variables.
+
+Example:
+
+``` env
+PORT=3000
+
+GFW_API_TOKEN=
+NOAA_API_KEY=
+OCEAN_DATA_API_KEY=
+OPENWEATHER_API_KEY=
+CARTO_API_KEY=
+
+COPERNICUS_API_KEY=
+
+VITE_AIS_API_KEY=
+VITE_MAP_API_KEY=
+VITE_SATELLITE_API_KEY=
+VITE_WEATHER_API_KEY=
+VITE_OCEAN_DATA_API_KEY=
+VITE_CARTO_API_KEY=
+VITE_GFW_API_TOKEN=
+```
+
+For production deployments, keep private credentials on the server side
+whenever possible.
+
+**Never commit real API keys to Git.**
 
 ------------------------------------------------------------------------
 
-# Demo / Fallback Mode
+# Data Honesty
 
-OORCA is designed to remain demonstrable even when live external
-services aren't available.
+OORCA can work with multiple types of information.
 
-Fallback operation can use:
-
--   Calibrated mathematical models
--   Synthetic AIS
--   Local datasets
--   Estimated environmental conditions
-
-The application should make the data state clear:
+We intentionally distinguish them:
 
 ``` text
 LIVE
-SIMULATED
-FALLBACK
+OBSERVED
+FORECAST
 MODELLED
+ESTIMATED
+DEMO
+UNAVAILABLE
 ```
 
-A realistic-looking map is not evidence by itself.
+This matters because a model prediction should never be presented as a
+direct observation.
+
+The same principle applies to external API failures.
+
+If a real data provider is unavailable, OORCA should show that state
+instead of silently pretending that generated values are live.
 
 ------------------------------------------------------------------------
 
-# Limitations
+# Demo Flow
 
-OORCA is an investigation and decision-support platform.
+For a quick demonstration:
 
-It is not a legal attribution engine.
+### 01 --- Open OORCA
 
-Results can be affected by:
+Start at the landing page.
 
--   SAR image quality
--   Satellite acquisition timing
--   Weather uncertainty
--   Ocean-current uncertainty
--   AIS coverage
--   AIS reporting gaps
--   Incomplete vessel histories
--   Simplified oil-spreading assumptions
--   External API availability
--   Ecological dataset coverage
+Show the main concept:
 
-A candidate vessel should therefore be treated as a lead for
-investigation, not automatic proof of responsibility.
+> Marine information → reasoning → decision support
+
+### 02 --- Open Marine Intelligence
+
+Navigate to:
+
+``` text
+/intelligence
+```
+
+Ask:
+
+> "What are the current marine conditions?"
+
+### 03 --- Explore the Map
+
+Show:
+
+-   Fishing activity
+-   Marine conditions
+-   Environmental information
+-   Geographic context
+
+### 04 --- Select an Area
+
+Show the supporting evidence.
+
+### 05 --- Ask OORCA
+
+Try:
+
+> "Is it safe to venture into the sea tomorrow?"
+
+Then:
+
+> "Why was this area flagged?"
+
+### 06 --- Open Fishery & Climate
+
+Navigate to:
+
+``` text
+/simulation
+```
+
+Show fishing activity and weather together.
+
+### 07 --- Show Incident Response
+
+Open:
+
+``` text
+/alerts
+```
+
+This demonstrates the original investigation capabilities of OORCA.
 
 ------------------------------------------------------------------------
 
-# Roadmap
+# Suggested README Screenshots
 
-## Current direction
+The best README version should include real screenshots from the current
+application.
 
--   [x] Interactive spill simulation
--   [x] 72-hour simulation timeline
--   [x] Spill characterisation workflow
--   [x] Hindcast / forecast workflow
--   [x] AIS correlation workflow
--   [x] Environmental impact layer
--   [x] Demo / fallback mode
+Place these files under:
 
-## Planned
+``` text
+docs/
+└── screenshots/
+    ├── 01-home.png
+    ├── 02-intelligence.png
+    ├── 03-fishery-climate.png
+    ├── 04-marine-map.png
+    ├── 05-anomaly.png
+    ├── 06-ask-oorca.png
+    ├── 07-marine-safety.png
+    ├── 08-incident-response.png
+    └── 09-architecture.png
+```
 
--   [ ] Automated Sentinel-1 ingestion
--   [ ] ML-based slick segmentation
--   [ ] OpenDrift / OpenOil production integration
--   [ ] Live AIS ingestion
--   [ ] Advanced vessel behaviour analysis
--   [ ] PostGIS trajectory analytics
--   [ ] Automated investigation reports
--   [ ] Large-scale historical AIS processing
--   [ ] Operational alerting
+Then use:
+
+``` md
+![OORCA Home](docs/screenshots/01-home.png)
+
+![Marine Intelligence](docs/screenshots/02-intelligence.png)
+
+![Fishery & Climate](docs/screenshots/03-fishery-climate.png)
+
+![Marine Map](docs/screenshots/04-marine-map.png)
+
+![Marine Anomaly](docs/screenshots/05-anomaly.png)
+
+![Ask OORCA](docs/screenshots/06-ask-oorca.png)
+
+![Marine Safety](docs/screenshots/07-marine-safety.png)
+
+![Incident Response](docs/screenshots/08-incident-response.png)
+```
+
+**Real screenshots are strongly preferred over generic stock images.**
 
 ------------------------------------------------------------------------
 
-# Contributing
+# Why OORCA?
 
-Contributions are welcome.
+Most marine datasets are useful individually.
 
-Useful areas include:
+The harder problem is understanding how they relate.
 
--   SAR image processing
--   Oil-spill segmentation
--   Computer vision / ML
--   Ocean drift modelling
--   AIS processing
--   Vessel trajectory analysis
--   PostGIS
--   Remote sensing
--   Environmental datasets
--   Geospatial visualisation
--   Frontend engineering
+OORCA focuses on that missing layer:
 
-For major changes, open an issue first so the approach can be discussed
-before implementation.
+``` text
+             DATA
+              │
+     ┌────────┼────────┐
+     ▼        ▼        ▼
+ Satellite  Weather  Fishing
+     │        │        │
+     └────────┼────────┘
+              ▼
+        OORCA REASONING
+              │
+       ┌──────┴──────┐
+       ▼             ▼
+   MAP / DATA     EXPLANATION
+       │             │
+       └──────┬──────┘
+              ▼
+       DECISION SUPPORT
+```
+
+The goal is not to make users understand every dataset.
+
+The goal is to make the information **useful**.
+
+------------------------------------------------------------------------
+
+# Current Development Focus
+
+The current development priority is a lightweight, reliable
+demonstration of the core PS-26176 workflow:
+
+-   Real external data where available
+-   Marine maps
+-   Fishing activity
+-   Weather
+-   Environmental context
+-   Marine anomaly candidates
+-   Conversational interaction
+-   Evidence-based reasoning
+-   Clear data provenance
+
+Complex features are intentionally kept separate from the main Marine
+Intelligence experience.
+
+------------------------------------------------------------------------
+
+# Future Scope
+
+Possible future extensions include:
+
+-   More satellite EO products
+-   Automated anomaly discovery
+-   More regional Indian languages
+-   Advanced multi-agent orchestration
+-   Route optimization
+-   Improved PFZ estimation
+-   More oceanographic datasets
+-   Real-time alert streams
+-   Historical marine trend analysis
+-   More detailed climate indicators
+-   On-device or edge intelligence
+-   Automated marine reports
+
+------------------------------------------------------------------------
+
+# SIH PS-26176 Alignment
+
+OORCA maps naturally to the core requirements of the problem statement:
+
+  -----------------------------------------------------------------------
+  PS-26176 Requirement                OORCA
+  ----------------------------------- -----------------------------------
+  Natural-language interaction        Ask OORCA
+
+  Contextual conversation             Conversational intelligence
+
+  Marine data integration             Weather, GFW, ocean and satellite
+                                      sources
+
+  EO data                             SAR / satellite analysis
+
+  Spatial reasoning                   Interactive geospatial map
+
+  Temporal reasoning                  Forecast and time-aware data
+
+  Explainable recommendations         Evidence + reasoning panel
+
+  Fisher safety                       Marine Safety & Risk
+
+  Geofencing                          Geographic layers
+
+  Fishing intelligence                GFW fishing activity
+
+  Environmental intelligence          Ocean + environmental indicators
+
+  Collaborative intelligence          Modular OORCA services and
+                                      reasoning pipeline
+  -----------------------------------------------------------------------
+
+------------------------------------------------------------------------
+
+# Project Philosophy
+
+OORCA follows a simple principle:
+
+> **Don't just show the data. Explain what the data means together.**
+
+A weather forecast alone is useful.
+
+A fishing map alone is useful.
+
+A satellite image alone is useful.
+
+But combining them can answer a much more useful question:
+
+> **"What is happening here, and what should I know before making a
+> decision?"**
+
+That is the problem OORCA is built to solve.
+
+------------------------------------------------------------------------
+
+# Team
+
+Built for **Smart India Hackathon**.
+
+**Project:** OORCA\
+**Focus:** Marine Intelligence & Environmental Decision Support\
+**Problem Statement:** SIH 26176\
+**Organization:** ISRO / Department of Space
 
 ------------------------------------------------------------------------
 
 # License
 
-OORCA is released under the Apache License 2.0.
+This project is licensed under the Apache License 2.0.
 
-See [`LICENSE`](LICENSE) for the full license text.
-
-------------------------------------------------------------------------
-
-# SEO / Project Topics
-
-Oil Spill Detection · Oil Spill Monitoring · Oil Spill Tracking ·
-Sentinel-1 SAR · SAR Imagery · Satellite Oil Spill Detection · Marine
-Environmental Intelligence · AIS Vessel Tracking · Vessel Attribution ·
-Vessel Trajectory Analysis · Oil Spill Drift Simulation · Oil Spill
-Hindcasting · Oil Spill Forecasting · OpenDrift · OpenOil · Marine
-Pollution Monitoring · Remote Sensing · GIS · Geospatial Intelligence ·
-PostGIS · Oceanographic Modelling · Smart India Hackathon · SIH 26143 ·
-NTRO
+See `LICENSE` for details.
 
 ------------------------------------------------------------------------
 
-::: {align="center"}
-### OORCA
-
-Observe · Reconstruct · Correlate · Investigate
-
-Built around Smart India Hackathon Problem Statement 26143
-:::
+```{=html}
+<p align="center">
+```
+`<strong>`{=html}OORCA`</strong>`{=html}`<br>`{=html} Marine
+Intelligence for a Changing Ocean
+```{=html}
+</p>
+```
